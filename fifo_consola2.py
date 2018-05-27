@@ -1,9 +1,3 @@
-# listos = []
-# terminados = []
-# bloqueados = []
-tiempo_total = 0
-
-
 class Rafaga:
     def __init__(self, duracion):
         self.duracion = duracion
@@ -21,34 +15,40 @@ class Proceso:
 
 
 def ejecutar(procesos, bloqueados, terminados):
-    if not bloqueados:
-        final_listo = bloqueados.pop(0)
-        listos.append(final_listo)
+    tiempo_total = 0
+    while len(procesos) > 0:
+        if len(bloqueados) != 0:
+            final_listo = bloqueados.pop(0)
+            listos.append(final_listo)
 
-    for r in range(0, procesos[0].rafagas[0].duracion):
-        procesos[0].estado = 2
-        procesos[0].contador += 1
-        procesos[0].tiempo += 1
-        tiempo_total += 1
-        print("ejecutando {}".format(r))
+        for r in range(0, procesos[0].rafagas[0].duracion):
+            procesos[0].estado = 2
+            procesos[0].contador += 1
+            procesos[0].tiempo += 1
+            # proc = actualizar_bcp(procesos[0])
+            tiempo_total += 1
+            print("ejecutando {}".format(r))
 
-    procesos[0].rafagas[0].ejecutado = 1
-    ejecutando = 0
+        procesos[0].rafagas[0].ejecutado = 1
+        ejecutando = 0
 
-    print("-----ejecucion terminada-----")
-    print("tiempo de proceso: {p}".format(p=procesos[0].tiempo))
-    print("estado de proceso: {p}".format(p=procesos[0].estado))
-    print("tiempo total: {p}".format(p=tiempo_total))
+        print("-----ejecucion terminada-----")
+        print("Proceso ejecutado: {n}".format(n=procesos[0].nombre))
+        print("tiempo de proceso: {p}".format(p=procesos[0].tiempo))
+        print("estado de proceso: {p}".format(p=procesos[0].estado))
+        print("tiempo total: {p}".format(p=tiempo_total))
 
-    procesos[0].rafagas.pop(0)
+        procesos[0].rafagas.pop(0)
 
-    if len(procesos[0].rafagas) == 0:
-        procesos[0].estado = 4
-        terminados.append(procesos[0])
-        procesos.pop(0)
-    elif len(procesos[0].rafagas) > 0:
-        bloqueados.append(procesos[0])
-        procesos.pop(0)
+        if len(procesos[0].rafagas) == 0:
+            procesos[0].estado = 4
+            terminados.append(procesos[0])
+            procesos.pop(0)
+        elif len(procesos[0].rafagas) > 0:
+            bloqueados.append(procesos[0])
+            procesos.pop(0)
+
+    return terminados
 
 
 def carga_rafaga(otra):
